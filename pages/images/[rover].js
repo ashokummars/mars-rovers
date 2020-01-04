@@ -8,6 +8,7 @@ import RoverDetails from '../../components/roverDetails';
 import NoImages from '../../components/noimages';
 import Pagination from '../../components/pagination';
 import Layout from '../../components/layout';
+import Error from '../../components/error';
 
 class Images extends App{
 
@@ -21,12 +22,11 @@ class Images extends App{
 	
 	render = () => {
 
-		/*if( this.props && this.props.photos ) {
-			this.setState({
-				...state,
-				photos: this.props.photos
-			})
-		}*/
+		
+		if( !this.props.success ){
+			return(<Error errorMessage={ this.props.errorMessage } />);
+		}
+
 		let page = this.props && this.props.router && this.props.router.query.page;
 		page = isNaN( page ) ? 1 : parseInt( page, 8 );
 		const photos = this.props.photos || [];
@@ -110,22 +110,24 @@ class Images extends App{
 	static async getInitialProps( context ){
 		const { rover, camera, martianSol, limit } = context.query;
 
-		console.log(context)
 		let url = 'https://api.nasa.gov/mars-photos/api/v1/rovers/' + rover + '/photos?';
 		if( camera ){
 			url += '&camera='+camera;
 		}
-		console.log( martianSol );
 		if( martianSol ) {
 			url += '&sol=' + martianSol;
 		}
 
 		const res = await fetch( url + '&api_key=adO1eHxyqLrNXlJuTS1wvVTHMh7iDZ9bz6geRvYp' );
-		const photos = await res.json();
+		const response = await res.json();
+		if( response.error ){
+			return {
+				success: false,
+				errorMessage: response.error.message
+			}
+		}
 
-		console.log( url );
-
-		return { photos: photos.photos };
+		return { photos: response.photos, success: true };
 	}
 }
 

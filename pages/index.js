@@ -5,6 +5,7 @@ import Link from 'next/link';
 
 import RoverDetails from '../components/roverDetails';
 import Layout from '../components/layout';
+import Error from '../components/error';
 
 export default class Rover extends App{
 
@@ -15,8 +16,8 @@ export default class Rover extends App{
 			rover: '',
 			roverName: '',
 			camera: '',
-			martianSol: '',
-			loading: false
+			martianSol: ''
+
 		}
 
 		this.onRoverChange = this.onRoverChange.bind( this );
@@ -25,7 +26,12 @@ export default class Rover extends App{
 	}
 
 	render(){
-
+		
+		if( !this.props.success ) {
+			return (
+				<Error errorMessage={ this.props.errorMessage }/>
+			)
+		}
 
 		const selectedRover = this.state.rover ? this.props.rovers[ this.state.rover ] : {};
 
@@ -33,8 +39,7 @@ export default class Rover extends App{
 			<Layout>
 				<div className="nasa-imagery-search">
 
-					{ !this.props.loading ? <div className="loading"/> : '' }
-
+					
 					<div>
 						<div className="row">
 							<span>Select Rover</span>
@@ -128,11 +133,22 @@ export default class Rover extends App{
 
 	static async getInitialProps() {
 		
-		const res = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=adO1eHxyqLrNXlJuTS1wvVTHMh7iDZ9bz6geRvYp');
-		const rovers = await res.json();
+		const res = await fetch('https://api.nasa.gov/mars-photos/api/v1/rovers?api_key=adO1eHxyqLrNXlJuTS1wvVTHMh7iDZ9bz6geRvYp', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json'
+			}})
 
+		const response = await res.json();
 
-		return { rovers: rovers.rovers, loading: true };
+		if( response.error ){
+			return {
+				success: false,
+				errorMessage: response.error.message
+			}
+		}
+
+		return { rovers: response.rovers, success: true };
 	}
 
 	onRoverChange( event ){
