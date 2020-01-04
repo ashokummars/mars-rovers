@@ -27,8 +27,8 @@ class Images extends App{
 				photos: this.props.photos
 			})
 		}*/
-		const page = this.props && this.props.route && this.props.route.query.page || 1;
-		console.log( page )
+		let page = this.props && this.props.router && this.props.router.query.page;
+		page = isNaN( page ) ? 1 : parseInt( page, 8 );
 		const photos = this.props.photos || [];
 		const batchRecords = photos.slice( page-1, 10) || [];
 

@@ -7,7 +7,7 @@ const Pagination = ( props ) => {
 	return(
 		<>
 			{ paginations.map( page =>  
-				<Link key={ page } href={"/images/[rover]?status=" + router.query.status + "&camera=" + router.query.camera + "&martianSol=" + router.query.martianSol + "&page=" + page} as={`/images/${ router.query.roverName }?status=${ router.query.status }&camera=${ router.query.camera }&martianSol=${ router.query.martianSol }&page=${ page }`}>
+				<Link key={ page } href={"/images/[rover]?status=" + router.query.status + "&camera=" + router.query.camera + "&martianSol=" + router.query.martianSol + "&page=" + page} as={`/images/${ router.query.rover }?status=${ router.query.status }&camera=${ router.query.camera }&martianSol=${ router.query.martianSol }&page=${ page }`}>
 					<a className="page">{ page }</a>
 				</Link>)
 			}
