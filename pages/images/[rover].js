@@ -49,7 +49,7 @@ class Images extends App{
 							<div className="gallery-div" key={ photo.id }>
 								<picture>
 									<source srcSet={ photo.img_src } className="gallery-img"/>
-									<img src={ photo.img_src } key={ photo.id } className="gallery-img"/>
+									<img src={ photo.img_src.replace("http://", "https://") } key={ photo.id } className="gallery-img"/>
 								</picture>
 							</div>
 							
