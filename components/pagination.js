@@ -5,21 +5,40 @@ const Pagination = ( props ) => {
 	const router = useRouter()
 	const paginations = batches( props.resultsSize );
 	return(
-		<>
-			{ paginations.map( page =>  
-				<Link key={ page } href={"/images/[rover]?status=" + router.query.status + "&camera=" + router.query.camera + "&martianSol=" + router.query.martianSol + "&page=" + page} as={`/images/${ router.query.rover }?status=${ router.query.status }&camera=${ router.query.camera }&martianSol=${ router.query.martianSol }&page=${ page }`}>
-					<a className="page">{ page }</a>
-				</Link>)
-			}
+		<div className="pagination">
+			<div className="prev">
+				<button>&lt;</button>
+			</div>
+			<div className="pages">
+				{ paginations.map( page =>  
+					<Link key={ page } href={"/images/[rover]?status=" + router.query.status + "&camera=" + router.query.camera + "&martianSol=" + router.query.martianSol + "&page=" + page} as={`/images/${ router.query.rover }?status=${ router.query.status }&camera=${ router.query.camera }&martianSol=${ router.query.martianSol }&page=${ page }`}>
+						<a className="page">{ page }</a>
+					</Link>)
+				}
+				
+			</div>
+			<div className="next">
+				<button>&gt;</button>
+			</div>
 
 			<style jsx>{`
-				a.page{
-					margin: 5px 5px;
+				div.pages{
+					width: 200px;
+    				overflow-y: scroll;
+    				display: initial;
 				}
-			`}
-			</style>
+
+				div.pagination{
+					display: flex;
+					padding: 10px 0;
+				}
+
+				a.page{
+						margin: 5px 5px;
+					}
+			`}</style>
 			
-		</>
+		</div>
 	)
 }
 
